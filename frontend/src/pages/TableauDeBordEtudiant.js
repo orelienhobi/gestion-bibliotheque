@@ -3,6 +3,7 @@ import { FaClock, FaMapMarkerAlt, FaPhone, FaEnvelope } from "react-icons/fa";
 import api from "../services/api";
 import Carrousel from "../components/Carrousel";
 import useInfosBibliotheque from "../hooks/useInfosBibliotheque";
+import TableauScroll from "../components/TableauScroll";
 
 function TableauDeBordEtudiant() {
   const [topLivres, setTopLivres] = useState([]);
@@ -46,20 +47,22 @@ function TableauDeBordEtudiant() {
       {enCours.length === 0 && enAttente.length === 0 ? (
         <p className="carte-message carte-message-verte">Aucun emprunt en cours ni en attente.</p>
       ) : (
-        <table>
-          <thead>
-            <tr><th>Livre</th><th>Statut</th><th>Échéance</th></tr>
-          </thead>
-          <tbody>
-            {[...enAttente, ...enCours].map((e) => (
-              <tr key={e.id} className={e.en_retard ? "ligne-retard" : ""}>
-                <td>{e.livre_titre}</td>
-                <td>{e.statut === "en_attente" ? "En attente de validation" : e.en_retard ? "En retard" : "À jour"}</td>
-                <td>{e.date_echeance || "—"}</td>
-              </tr>
+        <TableauScroll>
+          <table>
+            <thead>
+              <tr><th>Livre</th><th>Statut</th><th>Échéance</th></tr>
+            </thead>
+            <tbody>
+              {[...enAttente, ...enCours].map((e) => (
+                <tr key={e.id} className={e.en_retard ? "ligne-retard" : ""}>
+                  <td>{e.livre_titre}</td>
+                  <td>{e.statut === "en_attente" ? "En attente de validation" : e.en_retard ? "En retard" : "À jour"}</td>
+                  <td>{e.date_echeance || "—"}</td>
+                </tr>
             ))}
           </tbody>
         </table>
+        </TableauScroll>
       )}
 
       {aDesInfos && (

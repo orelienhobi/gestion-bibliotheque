@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import api from "../services/api";
 import Squelette from "../components/Squelette";
+import TableauScroll from "../components/TableauScroll";
 
 function EtudiantDetail() {
   const { id } = useParams();
@@ -26,6 +27,7 @@ function EtudiantDetail() {
       {emprunts.length === 0 ? (
         <p>Aucun emprunt pour cet étudiant.</p>
       ) : (
+        <TableauScroll>
         <table>
           <thead>
             <tr><th>Livre</th><th>Demande</th><th>Échéance</th><th>Retour</th><th>Statut</th></tr>
@@ -42,6 +44,7 @@ function EtudiantDetail() {
             ))}
           </tbody>
         </table>
+        </TableauScroll>
       )}
     </div>
   );

@@ -588,3 +588,138 @@ button.choix.actif { background-color: var(--couleur-primaire); color: white; bo
 .ligne-info { display: flex; align-items: flex-start; gap: 14px; font-weight: 600; }
 .ligne-info svg { color: var(--couleur-primaire); margin-top: 3px; flex-shrink: 0; }
 .texte-multiligne { white-space: pre-line; }
+/* ===== Tableaux scrollables horizontalement ===== */
+.tableau-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--rayon);
+}
+.tableau-scroll table { min-width: 560px; }
+
+/* ===== Boutons du menu mobile (cachés par défaut, affichés en dessous de 900px) ===== */
+.bouton-menu-mobile, .bouton-fermer-mobile {
+  display: none;
+  background-color: var(--couleur-carte);
+  color: var(--couleur-primaire);
+  border: 1px solid var(--couleur-bordure);
+  box-shadow: var(--ombre);
+}
+.bouton-menu-mobile {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 40;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  justify-content: center;
+  padding: 0;
+  font-size: 1.1rem;
+}
+.bouton-fermer-mobile {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  justify-content: center;
+  padding: 0;
+  align-self: flex-end;
+  margin: 0 16px 10px 0;
+}
+
+.voile-mobile {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 20, 30, 0.5);
+  z-index: 29;
+}
+
+/* ===== Tablette (≤ 900px) : sidebar en tiroir ===== */
+@media (max-width: 900px) {
+  .bouton-menu-mobile { display: flex; }
+
+  .barre-laterale {
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    width: 260px;
+    z-index: 30;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    overflow-y: auto;
+  }
+  .barre-laterale.ouverte {
+    transform: translateX(0);
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.25);
+  }
+  .barre-laterale.ouverte ~ .voile-mobile,
+  .voile-mobile { display: block; }
+  /* Le voile ne doit s'afficher que si le tiroir est ouvert : géré par le rendu conditionnel en JS */
+
+  .bouton-fermer-mobile { display: flex; }
+
+  .conteneur-principal {
+    padding: 70px 18px 24px;
+    max-width: 100%;
+  }
+}
+
+/* Le voile n'est injecté dans le DOM que lorsque le menu est ouvert (voir BarreLaterale.js),
+   donc pas besoin de condition CSS supplémentaire ici */
+@media (min-width: 901px) {
+  .voile-mobile { display: none !important; }
+}
+
+/* ===== Mobile (≤ 600px) ===== */
+@media (max-width: 600px) {
+  .conteneur-principal { padding: 64px 14px 20px; }
+
+  h1 { font-size: 1.4rem; }
+  h2 { font-size: 1rem; }
+
+  /* Formulaires : un champ par ligne */
+  form {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 14px;
+  }
+  form input, form select, form textarea, form button {
+    width: 100%;
+  }
+  .actions-cellule { width: 100%; }
+
+  /* Cartes de statistiques et compteurs principaux : une colonne */
+  .cartes-stats { grid-template-columns: 1fr; }
+  .rangee-compteurs-principaux { flex-direction: column; }
+  .carte-compteur-principal { width: 100%; justify-content: flex-start; }
+
+  /* Cartes de livres/catégories en slide : plus étroites */
+  .carte-slide { width: 78vw; height: 150px; }
+  .carte-slide-image { width: 120px; }
+
+  /* Graphique à barres : empile le libellé au-dessus de la barre */
+  .barre-ligne {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .barre-valeur { text-align: left; }
+
+  /* Page de connexion : marges réduites */
+  .carte-connexion { padding: 28px 22px; max-width: 94vw; }
+
+  /* Onglets de la page Paramètres : défilement horizontal plutôt que retour à la ligne */
+  .onglets {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+  button.onglet { flex-shrink: 0; }
+
+  /* Modales et recherche globale : occupent presque tout l'écran */
+  .modale-boite, .recherche-boite { width: 94vw; }
+  .recherche-fond { padding-top: 6vh; }
+
+  /* Infos pratiques, ligne de connexion : évite le débordement horizontal */
+  .liste-connexions li { flex-direction: column; align-items: flex-start; gap: 4px; }
+}

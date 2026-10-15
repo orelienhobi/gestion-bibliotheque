@@ -3,6 +3,7 @@ import api from "../services/api";
 import Squelette from "../components/Squelette";
 import EtatVide from "../components/EtatVide";
 import { FaInbox } from "react-icons/fa";
+import TableauScroll from "../components/TableauScroll";
 
 const LIBELLES_STATUT = {
   en_attente: "En attente", valide: "Validé", refuse: "Refusé", expire: "Expiré",
@@ -65,6 +66,7 @@ function Historique() {
       {filtres.length === 0 ? (
         <EtatVide icone={<FaInbox />} texte="Aucun emprunt ne correspond à ces filtres." couleur="violette" />
       ) : (
+        <TableauScroll>
         <table>
           <thead>
             <tr>
@@ -88,6 +90,7 @@ function Historique() {
             ))}
           </tbody>
         </table>
+        </TableauScroll>
       )}
     </div>
   );

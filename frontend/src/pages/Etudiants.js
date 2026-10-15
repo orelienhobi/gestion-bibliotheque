@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../services/api";
 import ModalConfirmation from "../components/ModalConfirmation";
+import TableauScroll from "../components/TableauScroll";
 
 const EDITION_VIDE = { id: null, nom_complet: "", email: "", telephone: "" };
 
@@ -77,12 +78,14 @@ function Etudiants() {
         </form>
       )}
 
-      <table>
-        <thead>
-          <tr><th>Nom et prénom</th><th>Email</th><th>Téléphone</th><th>Emprunts</th><th>Action</th></tr>
-        </thead>
-        <tbody>
-          {resultats.map((etu) => (
+      
+      <TableauScroll>
+        <table>
+          <thead>
+            <tr><th>Nom et prénom</th><th>Email</th><th>Téléphone</th><th>Emprunts</th><th>Action</th></tr>
+          </thead>
+          <tbody>
+            {resultats.map((etu) => (
             <tr key={etu.id}>
               <td><Link to={`/etudiants/${etu.id}`}>{etu.nom_complet}</Link></td>
               <td>{etu.email || "—"}</td>
@@ -97,6 +100,7 @@ function Etudiants() {
         </tbody>
       </table>
 
+      </TableauScroll>
       <ModalConfirmation
         ouverte={!!etudiantASupprimer}
         titre="Supprimer l'étudiant"

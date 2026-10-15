@@ -3,6 +3,7 @@ import api from "../services/api";
 import Squelette from "../components/Squelette";
 import EtatVide from "../components/EtatVide";
 import { FaInbox } from "react-icons/fa";
+import TableauScroll from "../components/TableauScroll";
 
 const LIBELLES_STATUT = {
   en_attente: "En attente", valide: "Validé", refuse: "Refusé", expire: "Expiré",
@@ -37,12 +38,13 @@ function MesEmpruntsEtudiant() {
       {filtres.length === 0 ? (
         <EtatVide icone={<FaInbox />} texte="Aucun emprunt pour ce filtre." couleur="violette" />
       ) : (
-        <table>
-          <thead>
-            <tr><th>Livre</th><th>Demande</th><th>Échéance</th><th>Retour</th><th>Statut</th></tr>
-          </thead>
-          <tbody>
-            {filtres.map((e) => (
+        <TableauScroll>
+          <table>
+            <thead>
+              <tr><th>Livre</th><th>Demande</th><th>Échéance</th><th>Retour</th><th>Statut</th></tr>
+            </thead>
+            <tbody>
+              {filtres.map((e) => (
               <tr key={e.id} className={e.en_retard ? "ligne-retard" : ""}>
                 <td>{e.livre_titre}</td>
                 <td>{new Date(e.date_emprunt).toLocaleDateString()}</td>
@@ -53,6 +55,7 @@ function MesEmpruntsEtudiant() {
             ))}
           </tbody>
         </table>
+        </TableauScroll>
       )}
     </div>
   );

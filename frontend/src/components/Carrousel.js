@@ -6,9 +6,10 @@ function Carrousel({ children }) {
 
   const defiler = (direction) => {
   if (piste.current) {
-    piste.current.scrollBy({ left: direction * 460, behavior: "smooth" });
+    const largeur = piste.current.clientWidth * 0.8;
+    piste.current.scrollBy({ left: direction * largeur, behavior: "smooth" });
   }
-  };
+};
 
   return (
     <div className="carrousel-conteneur">

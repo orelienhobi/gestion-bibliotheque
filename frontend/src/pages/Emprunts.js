@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
+import TableauScroll from "../components/TableauScroll";
 
 function Emprunts() {
   const [emprunts, setEmprunts] = useState([]);
@@ -34,11 +35,12 @@ function Emprunts() {
       {enAttente.length === 0 ? (
         <p className="carte-message carte-message-violette">Aucune demande en attente.</p>
       ) : (
-        <table>
-          <thead>
-            <tr><th>Livre</th><th>Étudiant</th><th>Demandé le</th><th>Action</th></tr>
-          </thead>
-          <tbody>
+        <TableauScroll>
+          <table>
+            <thead>
+              <tr><th>Livre</th><th>Étudiant</th><th>Demandé le</th><th>Action</th></tr>
+            </thead>
+            <tbody>
             {enAttente.map((e) => (
               <tr key={e.id}>
                 <td>{e.livre_titre}</td>
@@ -51,13 +53,15 @@ function Emprunts() {
               </tr>
             ))}
           </tbody>
-        </table>
+          </table>
+        </TableauScroll>
       )}
 
       <h2>Emprunts en cours</h2>
       {enCours.length === 0 ? (
         <p className="carte-message carte-message-verte">Aucun emprunt en cours.</p>
       ) : (
+        <TableauScroll>
         <table>
           <thead>
             <tr><th>Livre</th><th>Étudiant</th><th>Échéance</th><th>Statut</th><th>Action</th></tr>
@@ -76,16 +80,18 @@ function Emprunts() {
             ))}
           </tbody>
         </table>
+      </TableauScroll>
       )}
 
       <h2>Réservations en attente</h2>
       {reservations.length === 0 ? (
         <p className="carte-message carte-message-verte">Aucun emprunt en cours.</p>
       ) : (
-        <table>
-          <thead>
-            <tr><th>Livre</th><th>Étudiant</th><th>Statut</th><th>Action</th></tr>
-          </thead>
+        <TableauScroll>
+          <table>
+            <thead>
+              <tr><th>Livre</th><th>Étudiant</th><th>Statut</th><th>Action</th></tr>
+            </thead>
           <tbody>
             {reservations.map((r) => (
               <tr key={r.id} className={r.disponible ? "ligne-disponible" : ""}>
@@ -101,6 +107,7 @@ function Emprunts() {
             ))}
           </tbody>
         </table>
+        </TableauScroll>
       )}
     </div>
   );
