@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../config";
 
 const FORMULAIRE_VIDE = { username: "", password: "", confirmation: "", nom_complet: "", email: "", telephone: "" };
 
@@ -24,7 +25,7 @@ function InscriptionEtudiant() {
 
     const { confirmation, ...donnees } = formulaire;
     axios
-      .post("http://127.0.0.1:8000/api/inscription/", donnees)
+      .post(`${API_URL}/api/inscription/`, donnees)
       .then(() => navigate("/connexion"))
       .catch((error) => setErreur(error.response?.data?.erreur || "Erreur lors de l'inscription."));
   };

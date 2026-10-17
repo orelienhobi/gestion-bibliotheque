@@ -1,6 +1,7 @@
 import axios from "axios";
+import { API_URL } from "../config";
 
-const BASE_URL = "http://127.0.0.1:8000/api/";
+const BASE_URL = `${API_URL}/api/`;
 
 export function connecter(username, password) {
   return axios.post(`${BASE_URL}connexion/`, { username, password }).then((response) => {
