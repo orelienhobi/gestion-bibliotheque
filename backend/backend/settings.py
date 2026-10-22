@@ -107,14 +107,15 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-if os.environ.get("CLOUDINARY_URL"):
-    # Production : images sur Cloudinary
+CLOUDINARY_URL = config("CLOUDINARY_URL", default="")
+if CLOUDINARY_URL:
     STORAGES = {
-        "default": {"BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage"},
+        "default": {"BACKEND": "gestion_livres.storage.CloudinaryStorage"},
         "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
     }
 else:
-    # Local : images sur le disque
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = BASE_DIR / "media"
     STORAGES = {
         "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
         "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
