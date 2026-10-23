@@ -25,8 +25,9 @@ import ParametresEtudiant from "./pages/ParametresEtudiant";
 import Connexion from "./pages/Connexion";
 import InscriptionEtudiant from "./pages/InscriptionEtudiant";
 import "./App.css";
+import APropos from "./pages/APropos";
 
-// Applique le thème, la couleur, la police et la langue enregistrés dès le chargement
+
 appliquerPreferences();
 
 function MiseEnPageResponsable({ children }) {
@@ -70,6 +71,7 @@ function App() {
         <Route path="/etudiants" element={<MiseEnPageResponsable><Etudiants /></MiseEnPageResponsable>} />
         <Route path="/etudiants/:id" element={<MiseEnPageResponsable><EtudiantDetail /></MiseEnPageResponsable>} />
         <Route path="/parametres" element={<MiseEnPageResponsable><Parametres /></MiseEnPageResponsable>} />
+        <Route path="/a-propos" element={<MiseEnPageResponsable><APropos /></MiseEnPageResponsable>} />
 
         <Route path="/espace-etudiant" element={<MiseEnPageEtudiant><TableauDeBordEtudiant /></MiseEnPageEtudiant>} />
         <Route path="/espace-etudiant/catalogue" element={<MiseEnPageEtudiant><CatalogueEtudiant /></MiseEnPageEtudiant>} />

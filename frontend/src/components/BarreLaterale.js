@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import {
   FaBook, FaLayerGroup, FaExchangeAlt, FaUsers, FaChartBar,
-  FaHistory, FaSignOutAlt, FaSearch, FaCog, FaBars, FaTimes,
+  FaHistory, FaSignOutAlt, FaSearch, FaCog, FaBars, FaTimes, FaInfoCircle,
 } from "react-icons/fa";
 import { deconnecter } from "../services/auth";
 import api from "../services/api";
@@ -75,6 +75,7 @@ function BarreLaterale() {
           <NavLink to="/etudiants"><FaUsers /> {t("etudiant")}</NavLink>
           <NavLink to="/historique"><FaHistory /> {t("historique")}</NavLink>
           <NavLink to="/parametres"><FaCog /> {t("parametres")}</NavLink>
+          <NavLink to="/a-propos"><FaInfoCircle /> {t("a_propos")}</NavLink>
         </nav>
         <div className="barre-laterale-bas">
           <button onClick={gererDeconnexion}><FaSignOutAlt /> {t("deconnexion")}</button>

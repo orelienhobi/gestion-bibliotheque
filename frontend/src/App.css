@@ -723,3 +723,53 @@ button.choix.actif { background-color: var(--couleur-primaire); color: white; bo
   /* Infos pratiques, ligne de connexion : évite le débordement horizontal */
   .liste-connexions li { flex-direction: column; align-items: flex-start; gap: 4px; }
 }
+/* ===== Page À propos ===== */
+.a-propos-carte {
+  background-color: var(--couleur-carte);
+  border: 1px solid var(--couleur-bordure);
+  border-radius: var(--rayon);
+  box-shadow: var(--ombre);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+.a-propos-titre {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 14px; font-size: 1.1rem;
+  color: var(--texte-sur-teinte);
+}
+h2.a-propos-titre { margin-top: 28px; }
+.a-propos-carte .a-propos-titre { margin-top: 0; }
+.a-propos-infos {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px;
+}
+.a-propos-infos div { display: flex; flex-direction: column; gap: 4px; }
+.a-propos-label { color: var(--couleur-texte-clair); font-size: 0.85rem; }
+
+.a-propos-grille {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px;
+}
+.a-propos-grille .a-propos-carte { margin-bottom: 0; }
+.a-propos-nom-table {
+  margin: 0 0 4px; font-family: "Courier New", monospace; font-size: 1rem;
+  color: var(--couleur-texte);
+}
+.a-propos-tableau { box-shadow: none; min-width: 420px; }
+.a-propos-tableau th, .a-propos-tableau td { padding: 9px 10px; font-size: 0.82rem; }
+.a-propos-tableau td { font-weight: 500; }
+.a-propos-tableau code, .a-propos-relations code {
+  font-family: "Courier New", monospace; font-weight: 700; color: var(--couleur-texte);
+}
+
+.a-propos-relations { list-style: none; margin: 0 0 12px; padding: 0; }
+.a-propos-relations li {
+  display: grid; grid-template-columns: 240px 60px 1fr; gap: 14px; align-items: start;
+  padding: 12px 0; border-bottom: 1px solid var(--couleur-bordure); font-size: 0.9rem;
+}
+.a-propos-cardinalite { color: var(--couleur-primaire); font-weight: 800; }
+
+@media (max-width: 900px) {
+  .a-propos-grille { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .a-propos-relations li { grid-template-columns: 1fr; gap: 4px; }
+}
