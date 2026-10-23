@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import api from "../services/api";
-import Carrousel from "../components/Carrousel";
-import Squelette from "../components/Squelette";
 import ChampImage from "../components/ChampImage";
 
 const FORMULAIRE_VIDE = { id: null, titre: "", auteur: "", nombre_exemplaires: 1, rangee: "" };
+
+function ImageLivre({ src, alt }) {
+  const [erreur, setErreur] = useState(false);
+  if (!src || erreur) {
+    return <div className="carte-slide-placeholder">📖</div>;
+  }
+  return <img src={src} alt={alt} onError={() => setErreur(true)} />;
+}
 
 function CategorieDetail() {
   const { id } = useParams();
@@ -14,6 +20,9 @@ function CategorieDetail() {
   const [formulaire, setFormulaire] = useState(FORMULAIRE_VIDE);
   const [fichierImage, setFichierImage] = useState(null);
   const [modeEdition, setModeEdition] = useState(false);
+  const [erreur, setErreur] = useState("");
+  const [envoiEnCours, setEnvoiEnCours] = useState(false);
+  const [cleTelechargement, setCleTelechargement] = useState(0);
 
   const charger = () => {
     api.get(`categories/${id}/`).then((r) => setCategorie(r.data));
@@ -29,8 +38,18 @@ function CategorieDetail() {
     setFormulaire({ ...formulaire, [e.target.name]: e.target.value });
   };
 
+  const reinitialiserFormulaire = () => {
+    setFormulaire(FORMULAIRE_VIDE);
+    setFichierImage(null);
+    setModeEdition(false);
+    setCleTelechargement((c) => c + 1);
+  };
+
   const soumettre = (e) => {
     e.preventDefault();
+    setErreur("");
+    setEnvoiEnCours(true);
+
     const donnees = new FormData();
     donnees.append("titre", formulaire.titre);
     donnees.append("auteur", formulaire.auteur);
@@ -43,12 +62,25 @@ function CategorieDetail() {
       ? api.patch(`livres/${formulaire.id}/`, donnees)
       : api.post("livres/", donnees);
 
-    requete.then(() => {
-      setFormulaire(FORMULAIRE_VIDE);
-      setFichierImage(null);
-      setModeEdition(false);
-      charger();
-    });
+    requete
+      .then(() => {
+        reinitialiserFormulaire();
+        charger();
+      })
+      .catch((erreurRequete) => {
+        console.error("Erreur création/modification livre :", erreurRequete);
+        const detail = erreurRequete.response?.data;
+        const messageServeur = detail
+          ? (typeof detail === "string" ? detail : Object.values(detail).flat().join(" "))
+          : null;
+        setErreur(
+          messageServeur ||
+          (erreurRequete.response
+            ? `Erreur ${erreurRequete.response.status} : la demande a été refusée par le serveur.`
+            : "Impossible de contacter le serveur. Vérifiez votre connexion.")
+        );
+      })
+      .finally(() => setEnvoiEnCours(false));
   };
 
   const modifier = (livre) => {
@@ -59,19 +91,18 @@ function CategorieDetail() {
     setModeEdition(true);
   };
 
-  const annuler = () => {
-    setFormulaire(FORMULAIRE_VIDE);
-    setFichierImage(null);
-    setModeEdition(false);
-  };
-
   const supprimer = (livreId) => {
     if (window.confirm("Supprimer ce livre ?")) {
-      api.delete(`livres/${livreId}/`).then(() => charger());
+      api.delete(`livres/${livreId}/`)
+        .then(() => charger())
+        .catch((e) => {
+          console.error("Erreur suppression livre :", e);
+          setErreur("Impossible de supprimer ce livre.");
+        });
     }
   };
 
-  if (categorie === null) return <Squelette lignes ={4}>Chargement...</Squelette>;
+  if (!categorie) return <p className="chargement">Chargement...</p>;
 
   return (
     <div>
@@ -83,34 +114,40 @@ function CategorieDetail() {
         <input name="auteur" placeholder="Auteur" value={formulaire.auteur} onChange={gererChangement} required />
         <input type="number" name="nombre_exemplaires" value={formulaire.nombre_exemplaires} onChange={gererChangement} min="1" />
         <input name="rangee" placeholder="Rangée (ex: D)" value={formulaire.rangee} onChange={gererChangement} />
-        <ChampImage onFichierChange={setFichierImage} />
-        <button type="submit">{modeEdition ? "Modifier" : "Ajouter un livre"}</button>
-        {modeEdition && <button type="button" onClick={annuler}>Annuler</button>}
+        <ChampImage key={cleTelechargement} onFichierChange={setFichierImage} />
+        <button type="submit" disabled={envoiEnCours}>
+          {envoiEnCours ? "Envoi..." : modeEdition ? "Modifier" : "Ajouter un livre"}
+        </button>
+        {modeEdition && <button type="button" onClick={reinitialiserFormulaire}>Annuler</button>}
       </form>
 
-      <Carrousel>
-        {livres.map((livre) => {
-          const rupture = livre.exemplaires_disponibles <= 0;
-          return (
-            <div key={livre.id} className={`carte-slide ${rupture ? "livre-rupture" : ""}`}>
-              <div className="carte-slide-image">
-                {livre.image ? <img src={livre.image} alt={livre.titre} /> : <div className="carte-slide-placeholder">📖</div>}
-                {rupture && <span className="badge-rupture" title="Rupture de stock">⚠</span>}
+      {erreur && <p className="message-erreur">{erreur}</p>}
+
+      <div className="carrousel-conteneur">
+        <div className="carrousel-piste">
+          {livres.map((livre) => {
+            const rupture = livre.exemplaires_disponibles <= 0;
+            return (
+              <div key={livre.id} className={`carte-slide ${rupture ? "livre-rupture" : ""}`}>
+                <div className="carte-slide-image">
+                  <ImageLivre src={livre.image} alt={livre.titre} />
+                  {rupture && <span className="badge-rupture" title="Rupture de stock">⚠</span>}
+                </div>
+                <div className="carte-slide-corps">
+                  <h3>{livre.titre}</h3>
+                  <p>{livre.auteur}</p>
+                  <p className="texte-discret">Rangée {livre.rangee || "—"} · {livre.exemplaires_disponibles} dispo</p>
+                  <span className="actions-cellule">
+                    <button className="btn-modifier" onClick={() => modifier(livre)}>Modifier</button>
+                    <button className="btn-supprimer" onClick={() => supprimer(livre.id)}>Supprimer</button>
+                  </span>
+                </div>
               </div>
-              <div className="carte-slide-corps">
-                <h3>{livre.titre}</h3>
-                <p>{livre.auteur}</p>
-                <p className="texte-discret">Rangée {livre.rangee || "—"} · {livre.exemplaires_disponibles} dispo</p>
-                <span className="actions-cellule">
-                  <button className="btn-modifier" onClick={() => modifier(livre)}>Modifier</button>
-                  <button className="btn-supprimer" onClick={() => supprimer(livre.id)}>Supprimer</button>
-                </span>
-              </div>
-            </div>
-          );
-        })}
-      </Carrousel>
-      {livres.length === 0 && <p>Aucun livre dans cette catégorie.</p>}
+            );
+          })}
+        </div>
+      </div>
+      {livres.length === 0 && <p className="carte-message carte-message-verte">Aucun livre dans cette catégorie.</p>}
     </div>
   );
 }
