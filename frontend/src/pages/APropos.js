@@ -1,4 +1,5 @@
-import { FaUser, FaDatabase, FaKey } from "react-icons/fa";
+import { FaUser, FaDatabase, FaKey, FaProjectDiagram } from "react-icons/fa";
+import SchemaMPD from "../components/SchemaMPD";
 
 const INFOS = [
   { label: "Nom", valeur: "Orelien" },
@@ -146,7 +147,10 @@ function APropos() {
           ))}
         </div>
       </section>
-
+                <h2 className="a-propos-titre"><FaProjectDiagram /> Schéma des tables (MPD)</h2>
+      <section className="a-propos-carte">
+        <SchemaMPD />
+      </section>
       <h2 className="a-propos-titre"><FaDatabase /> Tables</h2>
       <div className="a-propos-grille">
         {TABLES.map((table) => (

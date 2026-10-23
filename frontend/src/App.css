@@ -773,3 +773,25 @@ h2.a-propos-titre { margin-top: 28px; }
 @media (max-width: 600px) {
   .a-propos-relations li { grid-template-columns: 1fr; gap: 4px; }
 }
+/* ===== Schéma MPD ===== */
+.mpd-conteneur { display: flex; flex-direction: column; gap: 10px; }
+.mpd-scroll {
+  width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  border-radius: var(--rayon);
+}
+.mpd-svg { display: block; min-width: 1370px; }
+
+.mpd-carte { fill: var(--couleur-carte); stroke: var(--couleur-bordure); stroke-width: 1.5; }
+.mpd-entete { fill: var(--couleur-primaire-fonce); }
+.mpd-titre { fill: #ffffff; font-size: 13px; font-weight: 700; font-family: "Courier New", monospace; }
+.mpd-separateur { stroke: var(--couleur-bordure); stroke-width: 1; }
+.mpd-champ { fill: var(--couleur-texte); font-size: 12px; font-family: "Courier New", monospace; }
+.mpd-champ-pk { font-weight: 700; text-decoration: underline; }
+
+.mpd-badge-pk { fill: var(--couleur-accent); }
+.mpd-badge-fk { fill: var(--couleur-primaire); }
+.mpd-badge-texte { fill: #ffffff; font-size: 9px; font-weight: 800; }
+
+.mpd-trait { fill: none; stroke: var(--couleur-primaire); stroke-width: 1.8; }
+.mpd-cardinalite { fill: var(--couleur-primaire); font-size: 11px; font-weight: 800; }
+.mpd-note { fill: var(--couleur-texte-clair); font-size: 11px; font-style: italic; }
