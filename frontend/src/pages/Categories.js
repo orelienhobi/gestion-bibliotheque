@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import api from "../services/api";
 import Carrousel from "../components/Carrousel";
 import ChampImage from "../components/ChampImage";
-import ModaleConfirmation from "../components/ModaleConfirmation";
+import ModalConfirmation from "../components/ModalConfirmation";
 
 const FORMULAIRE_VIDE = { id: null, nom: "" };
 
@@ -140,7 +140,7 @@ function Categories() {
       </Carrousel>
       {categories.length === 0 && <p className="carte-message carte-message-verte">Aucune catégorie pour l'instant.</p>}
 
-      <ModaleConfirmation
+      <ModalConfirmation
         ouverte={!!categorieASupprimer}
         titre="Supprimer la catégorie"
         message={`Voulez-vous vraiment supprimer « ${categorieASupprimer?.nom} » ?`}
