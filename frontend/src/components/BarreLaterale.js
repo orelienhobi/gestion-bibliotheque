@@ -75,7 +75,7 @@ function BarreLaterale() {
           <NavLink to="/etudiants"><FaUsers /> {t("etudiant")}</NavLink>
           <NavLink to="/historique"><FaHistory /> {t("historique")}</NavLink>
           <NavLink to="/parametres"><FaCog /> {t("parametres")}</NavLink>
-          <NavLink to="/a-propos"><FaInfoCircle /> {t("a_propos")}</NavLink>
+          <NavLink to="/a-propos"><FaInfoCircle /> {t("A propos")}</NavLink>
         </nav>
         <div className="barre-laterale-bas">
           <button onClick={gererDeconnexion}><FaSignOutAlt /> {t("deconnexion")}</button>
